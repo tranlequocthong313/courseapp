@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from ckeditor.fields import RichTextField
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 
@@ -25,9 +27,9 @@ class Category(models.Model):
 
 class Course(BaseModel):
     subject = models.CharField(max_length=100)
-    description = models.CharField(max_length=255, null=True)
+    description = RichTextField(null=True)
     category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='courses/%Y/%m')
+    image = CloudinaryField()
 
 
     def __str__(self):
@@ -43,9 +45,9 @@ class Tag(models.Model):
 
 class Lesson(BaseModel):
     subject = models.CharField(max_length=255)
-    content = models.TextField
+    content = RichTextField(null=True)
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='courses/%Y/%m')
+    image = CloudinaryField()
     tags = models.ManyToManyField(Tag)
 
 
