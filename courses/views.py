@@ -25,7 +25,7 @@ class CourseViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = Course.objects.filter(active=True)
     serializer_class = serializers.CourseSerializer
     pagination_class = paginators.CoursePaginator
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         if self.action == "list":
@@ -38,6 +38,12 @@ class CourseViewSet(viewsets.ViewSet, generics.ListAPIView):
                 self.queryset = self.queryset.filter(category_id=cate_id)
 
         return self.queryset
+
+    def get_permissions(self):
+        if self.action == "lessons":
+            if self.request.method == "POST":
+                return [permissions.IsAuthenticated()]
+        return super().get_permissions()
 
     """
     GET, POST /courses/<course_id>/lessons/
@@ -88,11 +94,11 @@ class LessonViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
     def get_permissions(self):
         if self.action == "comments":
             if self.request.method == "GET":
-                return [permissions.AllowAny()]
+                return super().get_permissions()
             return [permissions.IsAuthenticated()]
         if self.action in ["like"]:
             return [permissions.IsAuthenticated()]
-        return [permissions.AllowAny()]
+        return super().get_permissions()
 
     """
     GET, POST /lessons/<lesson_id>/comments/
