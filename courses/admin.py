@@ -1,18 +1,32 @@
 from django.contrib import admin
 from django.apps import apps
+from django.urls.resolvers import URLResolver
+from django.urls import path
 from django.utils.html import mark_safe
 from django import forms
+from django.template.response import TemplateResponse
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from cloudinary.forms import CloudinaryFileField
 
 from courses.models import *
+from . import dao
+
+
+class MyAdminSite(admin.AdminSite):
+    site_header = "iSuccess"
+
+    def get_urls(self) -> list[URLResolver]:
+        return [path("course-stats/", self.stats_view)] + super().get_urls()
+
+    def stats_view(self, request):
+        return TemplateResponse(
+            request, "admin/stats.html", {"stats": dao.count_course_by_cate()}
+        )
 
 
 class MyModelAdmin(admin.ModelAdmin):
     class Media:
-        css = {
-            'all': ['css/style.css']
-        }
+        css = {"all": ["css/style.css"]}
 
 
 class CourseForm(forms.ModelForm):
@@ -21,12 +35,12 @@ class CourseForm(forms.ModelForm):
 
     class Meta:
         model = Course
-        fields = '__all__'
+        fields = "__all__"
 
 
 class CourseAdmin(MyModelAdmin):
-    list_display = ['id', 'subject', 'description']
-    readonly_fields = ['preview_image']
+    list_display = ["id", "subject", "description"]
+    readonly_fields = ["preview_image"]
     form = CourseForm
 
     def preview_image(self, course):
@@ -43,23 +57,22 @@ class LessonForm(forms.ModelForm):
 
     class Meta:
         model = Lesson
-        fields = '__all__'
+        fields = "__all__"
 
 
 class LessonAdmin(MyModelAdmin):
-    list_display = ['id', 'subject', 'created_date', 'course_id']
-    list_filter = ['subject', 'created_date']
-    search_fields = ['subject', 'course']
+    list_display = ["id", "subject", "created_date", "course_id"]
+    list_filter = ["subject", "created_date"]
+    search_fields = ["subject", "course"]
     inlines = [TagInline]
     form = LessonForm
 
 
-admin_sites = {
-    'course': CourseAdmin,
-    'lesson': LessonAdmin
-}
+admin_sites = {"course": CourseAdmin, "lesson": LessonAdmin}
 
-course_app = apps.get_app_config('courses')
+course_app = apps.get_app_config("courses")
+
+admin_site = MyAdminSite(name="courseapp")
 
 for model_name, model in course_app.models.items():
-    admin.site.register(model, admin_sites.get(model_name, MyModelAdmin))
+    admin_site.register(model, admin_sites.get(model_name))

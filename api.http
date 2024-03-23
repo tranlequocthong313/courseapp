@@ -1,0 +1,10 @@
+POST http://localhost:8000/o/token/
+Content-Type: application/json
+
+{
+    "grant_type": "password",
+    "username": "root",
+    "password": "Admin@123",
+    "client_id": "my-test-app",
+    "client_secret ": "my-secret"
+}
