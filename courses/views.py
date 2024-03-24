@@ -31,7 +31,7 @@ class CourseViewSet(viewsets.ViewSet, generics.ListAPIView):
         if self.action == "list":
             q = self.request.query_params.get("q")
             if q:
-                self.queryset = self.queryset.filter(name__icontains=q)
+                self.queryset = self.queryset.filter(subject__icontains=q)
 
             cate_id = self.request.query_params.get("category_id")
             if cate_id:
