@@ -1,5 +1,6 @@
-from django.urls import path, re_path, include
+from django.urls import include, path
 from rest_framework import routers
+
 from courses import views
 
 r = routers.DefaultRouter()

@@ -1,5 +1,6 @@
-from courses.models import Category, Course, Lesson, Tag, Comment, User, Like
 from rest_framework import serializers
+
+from courses.models import Category, Comment, Course, Lesson, Like, Tag, User
 
 
 class CategorySerializer(serializers.ModelSerializer):

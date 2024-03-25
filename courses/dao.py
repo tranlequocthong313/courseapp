@@ -1,5 +1,6 @@
-from .models import Category, Course
 from django.db.models import Count
+
+from .models import Category, Course
 
 
 def load_courses(params={}):

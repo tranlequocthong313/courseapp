@@ -1,10 +1,10 @@
-from rest_framework import viewsets, generics, status, parsers, permissions
+from rest_framework import generics, parsers, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from courses.models import Category, Course, Lesson, User, Comment, Like
-from courses import serializers, paginators, permissions as perms
-
+from courses import paginators, serializers
+from courses import permissions as perms
+from courses.models import Category, Comment, Course, Lesson, Like, User
 
 """
 GET /categories/

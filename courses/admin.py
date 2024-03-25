@@ -1,14 +1,15 @@
-from django.contrib import admin
-from django.apps import apps
-from django.urls.resolvers import URLResolver
-from django.urls import path
-from django.utils.html import mark_safe
-from django import forms
-from django.template.response import TemplateResponse
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from cloudinary.forms import CloudinaryFileField
+from django import forms
+from django.apps import apps
+from django.contrib import admin
+from django.template.response import TemplateResponse
+from django.urls import path
+from django.urls.resolvers import URLResolver
+from django.utils.html import mark_safe
 
-from courses.models import *
+from courses.models import Course, Lesson
+
 from . import dao
 
 
